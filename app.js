@@ -1,5 +1,6 @@
 const express = require('express');
 const admin = require('./routes/admin');
+const contacts = require('./routes/contacts');
 const nunjucks = require('nunjucks');
 const db = require('./models');
 const logger = require('morgan');
@@ -36,6 +37,7 @@ app.get('/', function (req, res) {
 });
 // Routing
 app.use('/admin', admin);
+app.use('/contacts', contacts);
 
 app.listen(port, () => {
     console.log('Express listening on port', port);
