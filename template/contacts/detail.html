@@ -8,12 +8,29 @@
     </div>
     <div class="panel-body">
         <div style="padding-bottom: 10px">
-            작성일 : {{ contact.dateFormat( product.createdAt ) }}
+            작성일 : {{ contact.dateFormat( contact.createdAt ) }}
         </div>
 
         {{ contact.description }}
-
-
+        <hr/>
+        <ul>
+            {% for memo in contact.Memo %}
+            <li>
+                {{ memo.content }}
+                (
+                <a href="/contacts/delete/{{ contact.id }}/{{ memo.id }}"
+                   onclick="return confirm('삭제하시겠습니까?')">
+                    삭제
+                </a>
+                )
+            </li>
+            {% endfor %}
+        </ul>
+        메모작성하기
+        <form action="" method="post">
+            <textarea class="form-control" name="content" required></textarea>
+            <button class="btn btn-primary" style="margin-top: 10px">메모작성</button>
+        </form>
     </div>
 </div>
 

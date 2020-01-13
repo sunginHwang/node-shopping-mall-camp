@@ -9,10 +9,35 @@ router.get('/', (_, res) => {
     });
 });
 
-router.get('/detail/:id', (req, res) => {
-    models.Contacts.findByPk(req.params.id).then(contact => {
+router.get('/detail/:id', async (req, res) => {
+
+    try {
+        const contact = await models.Contacts.findOne({
+            where : {
+                id : req.params.id
+            },
+            include :[
+                'Memo'
+            ]
+        });
         res.render('contacts/detail.html', {contact});
-    });
+    }catch (e) {
+        console.log(e);
+    }
+});
+
+router.post('/detail/:id', async (req, res) => {
+
+    try {
+        const contact = await models.Contacts.findByPk(req.params.id);
+        // create + as에 적은 내용 ( Products.js association 에서 적은 내용 )
+        await contact.createMemo(req.body)
+        res.redirect('/contacts/detail/' + req.params.id);
+
+    } catch (e) {
+        console.log(e)
+    }
+
 });
 
 router.get('/edit/:id', (req, res) => {
@@ -51,6 +76,23 @@ router.post('/write', (req, res) => {
     models.Contacts.create({name, price, description}).then(() => {
         res.redirect('/contacts');
     });
+});
+
+router.get('/delete/:contact_id/:memo_id', async(req, res) => {
+
+    try{
+
+        await models.ContactsMemo.destroy({
+            where: {
+                id: req.params.memo_id
+            }
+        });
+        res.redirect('/contacts/detail/' + req.params.contact_id );
+
+    }catch(e){
+
+    }
+
 });
 
 module.exports = router;

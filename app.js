@@ -5,6 +5,7 @@ const nunjucks = require('nunjucks');
 const db = require('./models');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const port = 3000;
@@ -18,7 +19,8 @@ nunjucks.configure('template', {
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use(cookieParser());
+app.use('/uploads', express.static('uploads'));
 // DB authentication
 db.sequelize.authenticate()
     .then(() => {
