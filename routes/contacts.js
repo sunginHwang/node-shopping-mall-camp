@@ -13,15 +13,15 @@ router.get('/detail/:id', async (req, res) => {
 
     try {
         const contact = await models.Contacts.findOne({
-            where : {
-                id : req.params.id
+            where: {
+                id: req.params.id
             },
-            include :[
+            include: [
                 'Memo'
             ]
         });
         res.render('contacts/detail.html', {contact});
-    }catch (e) {
+    } catch (e) {
         console.log(e);
     }
 });
@@ -78,21 +78,23 @@ router.post('/write', (req, res) => {
     });
 });
 
-router.get('/delete/:contact_id/:memo_id', async(req, res) => {
+router.get('/delete/:contact_id/:memo_id', async (req, res) => {
 
-    try{
+    try {
 
         await models.ContactsMemo.destroy({
             where: {
                 id: req.params.memo_id
             }
         });
-        res.redirect('/contacts/detail/' + req.params.contact_id );
+        res.redirect('/contacts/detail/' + req.params.contact_id);
 
-    }catch(e){
+    } catch (e) {
 
     }
 
 });
 
 module.exports = router;
+
+

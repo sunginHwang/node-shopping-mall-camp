@@ -1,11 +1,18 @@
 const express = require('express');
 const admin = require('./routes/admin');
 const contacts = require('./routes/contacts');
+const accounts = require('./routes/accounts');
 const nunjucks = require('nunjucks');
 const db = require('./models');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+//flash  메시지 관련
+const flash = require('connect-flash');
+
+//passport 로그인 관련
+const passport = require('passport');
+const session = require('express-session');
 
 const app = express();
 const port = 3000;
@@ -14,6 +21,24 @@ nunjucks.configure('template', {
     autoescape: true,
     express: app
 });
+
+
+//session 관련 셋팅
+app.use(session({
+    secret: 'fastcampus',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 2000 * 60 * 60 //지속시간 2시간
+    }
+}));
+
+//passport 적용
+app.use(passport.initialize());
+app.use(passport.session());
+
+//플래시 메시지 관련
+app.use(flash());
 
 // 미들웨어 셋팅
 app.use(logger('dev'));
@@ -40,6 +65,7 @@ app.get('/', function (req, res) {
 // Routing
 app.use('/admin', admin);
 app.use('/contacts', contacts);
+app.use('/accounts', accounts);
 
 app.listen(port, () => {
     console.log('Express listening on port', port);

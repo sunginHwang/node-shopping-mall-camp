@@ -4,6 +4,7 @@ const router = express.Router();
 // csrf 셋팅
 const csrf = require('csurf');
 const csrfProtection = csrf({cookie: true});
+
 //이미지 저장되는 위치 설정
 const path = require('path');
 const uploadDir = path.join(__dirname, '../uploads'); // 루트의 uploads위치에 저장한다.
@@ -69,9 +70,9 @@ router.post('/products/detail/:id', async (req, res) => {
 });
 
 
-router.post('/products/edit/:id', upload.single('thumbnail') , csrfProtection , async(req, res) => {
+router.post('/products/edit/:id', upload.single('thumbnail'), csrfProtection, async (req, res) => {
 
-    try{
+    try {
         // 이전에 저장되어있는 파일명을 받아오기 위함
         const product = await models.Products.findByPk(req.params.id);
 
@@ -79,41 +80,41 @@ router.post('/products/edit/:id', upload.single('thumbnail') , csrfProtection , 
         req.body.thumbnail = (req.file) ? req.file.filename : product.thumbnail;
 
         await models.Products.update(
-            req.body ,
+            req.body,
             {
-                where : { id: req.params.id }
+                where: {id: req.params.id}
             }
         );
-        res.redirect('/admin/products/detail/' + req.params.id );
+        res.redirect('/admin/products/detail/' + req.params.id);
 
-    }catch(e){
+    } catch (e) {
 
     }
 
 });
 
-router.post('/products/edit/:id', upload.single('thumbnail') , csrfProtection , async(req, res) => {
+router.post('/products/edit/:id', upload.single('thumbnail'), csrfProtection, async (req, res) => {
 
-    try{
+    try {
         // 이전에 저장되어있는 파일명을 받아오기 위함
         const product = await models.Products.findByPk(req.params.id);
 
-        if(req.file && product.thumbnail) {  //요청중에 파일이 존재 할시 이전이미지 지운다.
-            fs.unlinkSync( uploadDir + '/' + product.thumbnail );
+        if (req.file && product.thumbnail) {  //요청중에 파일이 존재 할시 이전이미지 지운다.
+            fs.unlinkSync(uploadDir + '/' + product.thumbnail);
         }
 
         // 파일요청이면 파일명을 담고 아니면 이전 DB에서 가져온다
         req.body.thumbnail = (req.file) ? req.file.filename : product.thumbnail;
 
         await models.Products.update(
-            req.body ,
+            req.body,
             {
-                where : { id: req.params.id }
+                where: {id: req.params.id}
             }
         );
-        res.redirect('/admin/products/detail/' + req.params.id );
+        res.redirect('/admin/products/detail/' + req.params.id);
 
-    }catch(e){
+    } catch (e) {
 
     }
 
@@ -129,36 +130,36 @@ router.get('/products/delete/:id', async (req, res) => {
     res.redirect('/admin/products');
 });
 
-router.get('/products/write', csrfProtection , ( req , res ) => {
-    res.render( 'admin/form.html' , { csrfToken : req.csrfToken() });
+router.get('/products/write', csrfProtection, (req, res) => {
+    res.render('admin/form.html', {csrfToken: req.csrfToken()});
 });
 
 
 router.post('/products/write', upload.single('thumbnail'), csrfProtection, async (req, res) => {
-
+    console.log(req.file);
     try {
         req.body.thumbnail = (req.file) ? req.file.filename : "";
         await models.Products.create(req.body);
         res.redirect('/admin/products');
-
+w
     } catch (e) {
 
     }
 });
 
 
-router.get('/products/delete/:product_id/:memo_id', async(req, res) => {
+router.get('/products/delete/:product_id/:memo_id', async (req, res) => {
 
-    try{
+    try {
 
         await models.ProductsMemo.destroy({
             where: {
                 id: req.params.memo_id
             }
         });
-        res.redirect('/admin/products/detail/' + req.params.product_id );
+        res.redirect('/admin/products/detail/' + req.params.product_id);
 
-    }catch(e){
+    } catch (e) {
 
     }
 
