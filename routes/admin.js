@@ -9,6 +9,17 @@ const csrfProtection = csrf({cookie: true});
 const path = require('path');
 const uploadDir = path.join(__dirname, '../uploads'); // 루트의 uploads위치에 저장한다.
 const fs = require('fs');
+const {createLogger, format, transports} = require('winston');
+const {combine, timestamp, label, prettyPrint} = format;
+
+const logger = createLogger({
+    format: combine(
+        label({label: 'admin!'}),
+        timestamp(),
+        prettyPrint()
+    ),
+    transports: [new transports.Console()]
+})
 
 
 //multer 셋팅
@@ -45,7 +56,7 @@ router.get('/products/detail/:id', async (req, res) => {
         });
         res.render('admin/detail.html', {product});
     } catch (e) {
-        console.log(e);
+        logger.log({level: 'error', message: e});
     }
 
 });
@@ -64,7 +75,7 @@ router.post('/products/detail/:id', async (req, res) => {
         res.redirect('/admin/products/detail/' + req.params.id);
 
     } catch (e) {
-        console.log(e)
+        logger.log({level: 'error', message: e});
     }
 
 });
@@ -88,7 +99,7 @@ router.post('/products/edit/:id', upload.single('thumbnail'), csrfProtection, as
         res.redirect('/admin/products/detail/' + req.params.id);
 
     } catch (e) {
-
+        logger.log({level: 'error', message: e});
     }
 
 });
@@ -115,7 +126,7 @@ router.post('/products/edit/:id', upload.single('thumbnail'), csrfProtection, as
         res.redirect('/admin/products/detail/' + req.params.id);
 
     } catch (e) {
-
+        logger.log({level: 'error', message: e});
     }
 
 });
@@ -136,14 +147,12 @@ router.get('/products/write', csrfProtection, (req, res) => {
 
 
 router.post('/products/write', upload.single('thumbnail'), csrfProtection, async (req, res) => {
-    console.log(req.file);
     try {
         req.body.thumbnail = (req.file) ? req.file.filename : "";
         await models.Products.create(req.body);
         res.redirect('/admin/products');
-w
     } catch (e) {
-
+        logger.log({level: 'error', message: e});
     }
 });
 
@@ -160,7 +169,7 @@ router.get('/products/delete/:product_id/:memo_id', async (req, res) => {
         res.redirect('/admin/products/detail/' + req.params.product_id);
 
     } catch (e) {
-
+        logger.log({level: 'error', message: e});
     }
 
 });

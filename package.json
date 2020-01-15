@@ -4,6 +4,7 @@
   "description": "study for express-camp 15",
   "main": "app.js",
   "dependencies": {
+    "app-root-path": "^3.0.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.4",
     "csurf": "^1.10.0",
@@ -18,7 +19,8 @@
     "nunjucks": "^3.2.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "sequelize": "^4.42.0"
+    "sequelize": "^4.42.0",
+    "winston": "^3.2.1"
   },
   "devDependencies": {},
   "scripts": {
