@@ -4,6 +4,7 @@ const router = express.Router();
 // csrf 셋팅
 const csrf = require('csurf');
 const csrfProtection = csrf({cookie: true});
+const loginRequired = require('../helpers/loginRequired');
 
 //이미지 저장되는 위치 설정
 const path = require('path');
@@ -61,7 +62,7 @@ router.get('/products/detail/:id', async (req, res) => {
 
 });
 
-router.get('/products/edit/:id', csrfProtection, async (req, res) => {
+router.get('/products/edit/:id', loginRequired, csrfProtection, async (req, res) => {
     const product = await models.Products.findByPk(req.params.id);
     res.render('admin/form.html', {product, csrfToken: req.csrfToken()});
 });
@@ -81,7 +82,7 @@ router.post('/products/detail/:id', async (req, res) => {
 });
 
 
-router.post('/products/edit/:id', upload.single('thumbnail'), csrfProtection, async (req, res) => {
+router.post('/products/edit/:id', loginRequired, upload.single('thumbnail'), csrfProtection, async (req, res) => {
 
     try {
         // 이전에 저장되어있는 파일명을 받아오기 위함
@@ -141,15 +142,17 @@ router.get('/products/delete/:id', async (req, res) => {
     res.redirect('/admin/products');
 });
 
-router.get('/products/write', csrfProtection, (req, res) => {
+router.get('/products/write', loginRequired, csrfProtection, (req, res) => {
     res.render('admin/form.html', {csrfToken: req.csrfToken()});
 });
 
 
-router.post('/products/write', upload.single('thumbnail'), csrfProtection, async (req, res) => {
+router.post('/products/write', loginRequired, upload.single('thumbnail'), csrfProtection, async (req, res) => {
     try {
         req.body.thumbnail = (req.file) ? req.file.filename : "";
-        await models.Products.create(req.body);
+        // 유저를 가져온다음에 저장
+        const user = await models.User.findByPk(req.user.id);
+        await user.createProduct(req.body)
         res.redirect('/admin/products');
     } catch (e) {
         logger.log({level: 'error', message: e});

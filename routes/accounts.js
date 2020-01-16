@@ -70,13 +70,14 @@ router.get('/login', (req, res) => {
     res.render('accounts/login.html', { flashMessage : req.flash().error });
 });
 
+
 router.post('/login' ,
     passport.authenticate('local', {
         failureRedirect: '/accounts/login',
         failureFlash: true
     }),
     ( _ , res) => {
-        res.send('<script>alert("로그인 성공");location.href="/accounts/success";</script>');
+        res.send('<script>alert("로그인 성공");location.href="/";</script>');
     }
 );
 

@@ -1,4 +1,5 @@
 const moment = require('moment');
+const models = require('../models');
 
 module.exports = (sequelize, DataTypes) => {
     const Products = sequelize.define('Products',
@@ -21,7 +22,10 @@ module.exports = (sequelize, DataTypes) => {
             sourceKey: 'id',
             onDelete: 'CASCADE'
         });
+
+        Products.belongsTo(models.User, { as :'Owner',  foreignKey: 'user_id', targetKey: 'id'} );
     };
+
 
     Products.prototype.dateFormat = date => moment(date).format('YYYY-MM-DD');
 
