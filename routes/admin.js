@@ -5,6 +5,7 @@ const router = express.Router();
 const csrf = require('csurf');
 const csrfProtection = csrf({cookie: true});
 const loginRequired = require('../helpers/loginRequired');
+const paginate = require('express-paginate');
 
 //이미지 저장되는 위치 설정
 const path = require('path');
@@ -39,10 +40,37 @@ router.get('/', (req, res) => {
     res.send('admin app');
 });
 
-router.get('/products', async (_, res) => {
-    const products = await models.Products.findAll({});
-    // DB에서 받은 products를 products변수명으로 내보냄
-    res.render('admin/products.html', {products});
+router.get('/products', paginate.middleware(3, 50), async (req,res) => {
+
+    try{
+
+        const [ products, totalCount ] = await Promise.all([
+
+            models.Products.findAll({
+                include : [
+                    {
+                        model : models.User ,
+                        as : 'Owner',
+                        attributes : [ 'username' , 'displayname' ]
+                    },
+                ],
+                limit : req.query.limit ,
+                offset : req.offset
+            }),
+
+            models.Products.count()
+        ]);
+
+        const pageCount = Math.ceil( totalCount / req.query.limit );
+
+        const pages = paginate.getArrayPages(req)( 4 , pageCount, req.query.page);
+
+        res.render( 'admin/products.html' , { products , pages , pageCount });
+
+    }catch(e){
+
+    }
+
 });
 
 router.get('/products/detail/:id', async (req, res) => {
