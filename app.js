@@ -1,6 +1,7 @@
 const express = require('express');
 const admin = require('./routes/admin');
 const auth = require('./routes/auth');
+const mypage = require('./routes/mypage');
 const home = require('./routes/home');
 const contacts = require('./routes/contacts');
 const accounts = require('./routes/accounts');
@@ -72,6 +73,8 @@ app.use(function(req, res, next) {
 // Routing
 app.use('/', home);
 app.use('/auth', auth);
+app.use('/mypage', mypage);
+
 app.use('/admin', admin);
 app.use('/contacts', contacts);
 app.use('/accounts', accounts);
