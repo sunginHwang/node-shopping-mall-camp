@@ -29,8 +29,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "nodemon -e js,html app.js",
-    "dev": "nodemon app.js",
+    "start": "nodemon -e js,html server.js",
+    "dev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

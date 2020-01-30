@@ -15,7 +15,7 @@
             <img src="/uploads/{{ product.thumbnail }}" style="max-width: 100%"/>
         </p>
         {% endif %}
-        {{ product.description }}
+        {{ product.description | safe }}
         <hr />
         <ul>
             {% for memo in product.Memo %}
