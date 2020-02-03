@@ -1,16 +1,13 @@
-const express = require('express');
 const models = require('../../models');
-const router = express.Router();
 
 
-router.get('/', (_, res) => {
+exports.getContacts = async (req, res) => {
     models.Contacts.findAll({}).then(contacts => {
         res.render('contacts/contacts.html', {contacts});
     });
-});
+}
 
-router.get('/detail/:id', async (req, res) => {
-
+exports.getContact = async (req, res) => {
     try {
         const contact = await models.Contacts.findOne({
             where: {
@@ -24,10 +21,9 @@ router.get('/detail/:id', async (req, res) => {
     } catch (e) {
         console.log(e);
     }
-});
+}
 
-router.post('/detail/:id', async (req, res) => {
-
+exports.goWriteContactPage = async (req, res) => {
     try {
         const contact = await models.Contacts.findByPk(req.params.id);
         // create + as에 적은 내용 ( Products.js association 에서 적은 내용 )
@@ -37,26 +33,24 @@ router.post('/detail/:id', async (req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
 
-});
-
-router.get('/edit/:id', (req, res) => {
+exports.goEditContactPage =  (req, res) => {
     models.Contacts.findByPk(req.params.id).then(contact => {
         res.render('contacts/form.html', {contact});
     });
-});
+}
 
-router.post('/edit/:id', (req, res) => {
+exports.modifyContact = async (req, res) => {
     const {name, price, description} = req.body;
     const {id} = req.params;
     models.Contacts.update({name, price, description}, {where: {id}}
     ).then(() => {
         res.redirect(`/contacts/detail/${id}`);
     });
+}
 
-});
-
-router.get('/delete/:id', (req, res) => {
+exports.removeContact = async (req, res) => {
     const {id} = req.params;
     models.Contacts.destroy({
         where: {
@@ -65,23 +59,22 @@ router.get('/delete/:id', (req, res) => {
     }).then(() => {
         res.redirect('/contacts');
     });
-});
+}
 
-router.get('/write', (req, res) => {
+exports.goWritePage = (req, res) => {
     res.render('contacts/form.html');
-});
+};
 
-router.post('/write', (req, res) => {
+exports.createContact = (req, res) => {
     const {name, price, description} = req.body;
     models.Contacts.create({name, price, description}).then(() => {
         res.redirect('/contacts');
     });
-});
+};
 
-router.get('/delete/:contact_id/:memo_id', async (req, res) => {
+exports.removeContactMemo = async (req, res) => {
 
     try {
-
         await models.ContactsMemo.destroy({
             where: {
                 id: req.params.memo_id
@@ -90,11 +83,9 @@ router.get('/delete/:contact_id/:memo_id', async (req, res) => {
         res.redirect('/contacts/detail/' + req.params.contact_id);
 
     } catch (e) {
-
+        console.log(e);
     }
 
-});
-
-module.exports = router;
+};
 
 

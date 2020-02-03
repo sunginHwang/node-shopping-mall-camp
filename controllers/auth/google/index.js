@@ -1,10 +1,12 @@
+
 const express = require('express');
 const router = express.Router();
+const ctrl = require('./google.ctrl');
 
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-const models = require('../../models');
+const models = require('../../../models');
 
 const dotenv = require('dotenv');
 dotenv.config(); // LOAD CONFIG
@@ -52,7 +54,6 @@ passport.use(new GoogleStrategy({
 
 router.get('/', passport.authenticate('google', {scope: 'email'}));
 
-
 //인증후 페이스북에서 이 주소로 리턴해줌. 상단에 적은 callbackURL과 일치
 router.get('/callback',
     passport.authenticate('google',
@@ -64,13 +65,8 @@ router.get('/callback',
 );
 
 //로그인 성공시 이동할 주소
-router.get('/success', (req, res) => {
-    res.send(req.user);
-});
-
-router.get('/fail', (req, res) => {
-    res.send('google login fail');
-});
+router.get('/success', ctrl.socialLoginSuccess);
+router.get('/fail',ctrl.socialLoginFail);
 
 
 module.exports = router;

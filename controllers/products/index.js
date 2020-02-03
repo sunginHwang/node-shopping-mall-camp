@@ -1,19 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const models = require('../../models');
+const ctrl = require('./products.ctrl');
 
-router.get('/:id' , async(req, res) => {
-
-    try{
-
-        const product = await models.Products.findByPk(req.params.id);
-        res.render('products/detail.html', { product });
-
-    }catch(e){
-
-    }
-
-});
-
+router.get('/:id', ctrl.getProducts);
 
 module.exports = router;
