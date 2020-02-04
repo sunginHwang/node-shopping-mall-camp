@@ -40,6 +40,7 @@
                         {{ link( '/chat' , "CHAT" , req_path ) }}
                         {% if isLogin %}
                         <li><a href="/accounts/logout" onclick="return confirm('로그아웃 하시겠습니까?')">LOGOUT</a></li>
+                        {{ link( '/cart' , "CART" , req_path ) }}
                         {% else %}
                         {{ link( '/accounts/join' , "JOIN" , req_path ) }}
                         {{ link( '/accounts/login' , "LOGIN" , req_path ) }}

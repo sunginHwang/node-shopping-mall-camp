@@ -18,5 +18,7 @@ router.get('/products/write', loginRequired, csrfProtection, ctrl.getWriteProduc
 router.post('/products/write', loginRequired, upload.single('thumbnail'), csrfProtection, ctrl.writeProduct);
 router.get('/products/delete/:product_id/:memo_id', ctrl.getProductMemo);
 router.post('/products/ajax_summernote', loginRequired, upload.single('thumbnail'),ctrl.createImage);
+router.get('/order', ctrl.get_order );
+router.get('/order/edit/:id', ctrl.get_order_edit );
 
 module.exports = router;

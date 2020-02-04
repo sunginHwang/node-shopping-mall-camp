@@ -146,3 +146,26 @@ exports.getProductMemo = async (req, res) => {
 exports.createImage = async (req, res) => {
     res.send('/uploads/' + req.file.filename);
 }
+
+exports.get_order = async(req,res) => {
+
+    try{
+
+        const checkouts = await models.Checkout.findAll();
+        res.render( 'admin/order.html' , { checkouts });
+
+    }catch(e){
+
+    }
+}
+
+exports.get_order_edit = async(req,res) => {
+    try{
+
+        const checkout = await models.Checkout.findByPk(req.params.id);
+        res.render( 'admin/order_edit.html' , { checkout });
+
+    }catch(e){
+
+    }
+}

@@ -41,38 +41,16 @@
                 </div>
                 <div style="clear:both"></div>
             </div>
+            <a href="/" class="btn btn-default">목록으로</a>
+            <button class="btn btn-primary">장바구니 담기</button>
         </form>
     </div>
 </div>
 
-<a href="/" class="btn btn-default">목록으로</a>
-<button class="btn btn-primary">장바구니 담기</button>
+
 
 <script>
     $(document).ready(function(){
-        $('.CountBox a').click(function(event){
-            event.preventDefault();
-            //타입을 받아온다
-            var type = $(this).attr('type');
-
-            //현재 장바구니에 담을 갯수를 저장
-            var cartNum = $('input[name=number]').val();
-
-            //현재 제품의 가격표
-            var price = $('input[name=price]').val();
-            if(type==='minus'){ //+,- 냐에 따라 나눈다
-                cartNum -= ( (cartNum==1) ? 0 : 1 ); //1이하로는 못내려가게 한다
-            }else if(type==='plus'){
-                cartNum++;
-            }
-            //input 태그에 반영 , html페이지 에도 반영
-            $('input[name=number]').val(cartNum);
-            $('#amountHtml').html(cartNum);
-            $('input[name=amount]').val(cartNum * price);
-            $('#priceHtml').html(cartNum * price);
-
-
-        });
 
         $('#cartForm').submit(function(){
             if(confirm('장바구니에 담겠습니까?')){
@@ -107,6 +85,31 @@
 
             return false;
         });
+
+        $('.CountBox a').click(function(event){
+            event.preventDefault();
+            //타입을 받아온다
+            var type = $(this).attr('type');
+
+            //현재 장바구니에 담을 갯수를 저장
+            var cartNum = $('input[name=number]').val();
+
+            //현재 제품의 가격표
+            var price = $('input[name=price]').val();
+            if(type==='minus'){ //+,- 냐에 따라 나눈다
+                cartNum -= ( (cartNum==1) ? 0 : 1 ); //1이하로는 못내려가게 한다
+            }else if(type==='plus'){
+                cartNum++;
+            }
+            //input 태그에 반영 , html페이지 에도 반영
+            $('input[name=number]').val(cartNum);
+            $('#amountHtml').html(cartNum);
+            $('input[name=amount]').val(cartNum * price);
+            $('#priceHtml').html(cartNum * price);
+
+
+        });
+
 
     });
 
