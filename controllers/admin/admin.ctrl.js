@@ -169,3 +169,50 @@ exports.get_order_edit = async(req,res) => {
 
     }
 }
+
+exports.statistics = (_,res) => {
+    res.render('admin/statistics.html');
+}
+
+exports.statistics = async( _ ,res) => {
+    try{
+        const barData = await models.Checkout.findAll({
+            attributes: [
+                [models.sequelize.literal('date_format( createdAt, "%Y-%m-%d")'), 'date'],
+                [models.sequelize.fn('count', models.sequelize.col('id')), 'cnt']
+            ],
+            group: [ 'date' ]
+        });
+
+        const pieData = await models.Checkout.findAll({
+            attributes: [
+                'status' ,
+                [models.sequelize.fn('count', models.sequelize.col('id')), 'cnt']
+            ],
+            group: [ 'status' ]
+        })
+
+        res.render('admin/statistics.html' , { barData , pieData });
+
+    }catch(e){
+        console.log(e)
+    }
+
+}
+
+exports.post_order_edit = async(req,res) => {
+    try{
+
+        await models.Checkout.update(
+            req.body ,
+            {
+                where : { id: req.params.id }
+            }
+        );
+
+        res.redirect('/admin/order');
+
+    }catch(e){
+
+    }
+}

@@ -36,7 +36,9 @@
                     <ul class="nav navbar-nav">
                         {% from "macro/link.html" import link %}
                         {{ link( '/' , "Home" , req_path ) }}
+                        {% if req_user.username == 'admin' %}
                         {{ link( '/admin/products' , "ADMIN" , req_path ) }}
+                        {% endif %}
                         {{ link( '/chat' , "CHAT" , req_path ) }}
                         {% if isLogin %}
                         <li><a href="/accounts/logout" onclick="return confirm('로그아웃 하시겠습니까?')">LOGOUT</a></li>
@@ -45,6 +47,9 @@
                         {{ link( '/accounts/join' , "JOIN" , req_path ) }}
                         {{ link( '/accounts/login' , "LOGIN" , req_path ) }}
                         {% endif %}
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/checkout/nomember">구매조회</a></li>
                     </ul>
                 </div>
             </div>
