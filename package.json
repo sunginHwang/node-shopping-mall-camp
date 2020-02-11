@@ -30,11 +30,15 @@
     "socket.io": "^2.3.0",
     "winston": "^3.2.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.0.1",
+    "puppeteer": "^1.11.0"
+  },
   "scripts": {
     "start": "nodemon -e js,html server.js",
     "dev": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/.bin/mocha test.js"
   },
   "repository": {
     "type": "git",
